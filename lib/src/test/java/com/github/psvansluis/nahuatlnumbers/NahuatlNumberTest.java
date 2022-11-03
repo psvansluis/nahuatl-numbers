@@ -13,4 +13,10 @@ class NahuatlNumberTest {
         NahuatlNumber a = new NahuatlNumber(0);
         assertEquals("ahtle", a.toClassical());
     }
+
+    @Test
+    void oneReturnsCee() {
+        NahuatlNumber a = new NahuatlNumber(1);
+        assertEquals("cē", a.toClassical());
+    }
 }
