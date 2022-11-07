@@ -5,32 +5,52 @@ package com.github.psvansluis.nahuatlnumbers;
 
 public class NahuatlNumber {
     private int val;
-    private static final String COMBINER = "īpan";
+    private static final String SMALLER_COMBINER = "on";
+    private static final String LARGER_COMBINER = "īpan";
+    private static final String FIVE_COMBINER = "chikᵂ";
+    private static final char[] VOWELS = { 'a', 'e', 'i', 'o', 'ā', 'ē', 'ī', 'ō' };
 
     private enum BasicForms {
-        ahtle(0, true),
-        sē(1, true),
-        sem(1, false),
-        ōme(2, true),
-        ōm(2, false),
-        ēi(3, true),
-        ē(3, false),;
+        ZERO(0, "ahtle"),
+        ONE(1, "sē", "sen"),
+        TWO(2, "ōme", "ōm"),
+        THREE(3, "ēi"),
+        FOUR(4, "nāwi"),
+        FIVE(5, "mākᵂīlli"),
+        TEN(10, "mahtlāktli"),
+        FIFTEEN(15, "caxtōlli"),
+        TWENTY(20, "pōwalli"),
+        FOURHUNDRED(400, "tzontli"),
+        EIGHTTHOUSAND(8000, "xiquipilli");
 
         private int numericValue;
-        private boolean wordFinal;
+        private String finalForm;
+        private String combiningForm;
 
-        BasicForms(int numericValue, boolean wordFinal) {
-            this.numericValue = numericValue;
-            this.wordFinal = wordFinal;
+        BasicForms(int value, String finalForm) {
+            this.numericValue = value;
+            this.finalForm = finalForm;
+            this.combiningForm = apocopate(finalForm);
         }
 
-        private static String get(int numericValue, boolean wordFinal) {
-            for (BasicForms u : BasicForms.values()) {
-                if (u.numericValue == numericValue && u.wordFinal == wordFinal) {
-                    return u.name();
-                }
+        BasicForms(int value, String finalForm, String combiningForm) {
+            this.numericValue = value;
+            this.finalForm = finalForm;
+            this.combiningForm = combiningForm;
+        }
+
+        static String removeSuffix(String str, String suffix) {
+            if (str.endsWith(suffix)) {
+                str = str.substring(0, str.length() - 1);
             }
-            return null;
+            return str;
+        }
+
+        private static String apocopate(String finalForm) {
+            String out = removeSuffix(finalForm, "i");
+            out = removeSuffix(out, "l");
+            out = removeSuffix(out, "t");
+            return out;
         }
     }
 
@@ -39,7 +59,7 @@ public class NahuatlNumber {
     }
 
     public String toClassical() {
-        return BasicForms.get(this.val, true);
+
     }
 
 }
